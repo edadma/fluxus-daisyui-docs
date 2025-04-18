@@ -1,7 +1,7 @@
 ; fluxus-daisyui library docs website code
 
 # app sources
-./src/main/scala/io/github/fluxus/daisyui/docs
+./src/main/scala/io/github/edadma/fluxus/daisyui/docs
 App.scala
 
 # build files
