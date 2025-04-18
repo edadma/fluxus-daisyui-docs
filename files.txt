@@ -3,6 +3,12 @@
 # app sources
 ./src/main/scala/io/github/edadma/fluxus/daisyui/docs
 App.scala
+ButtonPage.scala
+ComponentsOverviewPage.scala
+Example.scala
+HomePage.scala
+NotFoundPage.scala
+TablePage.scala
 
 # build files
 ./

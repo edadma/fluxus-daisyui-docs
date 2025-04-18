@@ -3,103 +3,167 @@ package io.github.edadma.fluxus.daisyui.docs
 import io.github.edadma.fluxus.*
 import io.github.edadma.fluxus.daisyui.*
 
-// Components overview page
+// Components overview page with card layout matching the previous Featured Components section
 val ComponentsOverviewPage = () => {
-  // Component categories
-  val componentCategories = List(
-    (
-      "General",
-      List(
-        ComponentInfo("Button", "Interactive button element", "#button"),
-        ComponentInfo("Avatar", "User or item avatars", "#avatar"),
-        ComponentInfo("Icon", "Semantic vector graphics", "#icon"),
+  // Component info for cards
+  val components = List(
+    ComponentInfo(
+      name = "Button",
+      description = "Flexible buttons with extensive styling options.",
+      href = "#button",
+      example = div(
+        cls := "flex flex-wrap gap-2",
+        Button <> ButtonProps(text = "Primary", variant = "primary"),
+        Button <> ButtonProps(text = "Secondary", variant = "secondary"),
+        Button <> ButtonProps(text = "Accent", variant = "accent"),
       ),
     ),
-    (
-      "Layout",
-      List(
-        ComponentInfo("Grid", "2D layout system", "#grid"),
-        ComponentInfo("Container", "Content wrapper", "#container"),
-        ComponentInfo("Divider", "Separation line", "#divider"),
+    ComponentInfo(
+      name = "Table",
+      description = "Powerful tables for data display.",
+      href = "#table",
+      example = div(
+        cls := "border rounded overflow-x-auto",
+        table(
+          cls := "table table-xs",
+          thead(
+            tr(
+              th("ID"),
+              th("Name"),
+            ),
+          ),
+          tbody(
+            tr(
+              td("1"),
+              td("John"),
+            ),
+            tr(
+              td("2"),
+              td("Jane"),
+            ),
+          ),
+        ),
       ),
     ),
-    (
-      "Navigation",
-      List(
-        ComponentInfo("Menu", "Application menu", "#menu"),
-        ComponentInfo("Tabs", "Content tabs", "#tabs"),
-        ComponentInfo("Pagination", "Page navigation", "#pagination"),
+    ComponentInfo(
+      name = "Card",
+      description = "Versatile content containers.",
+      href = "#card",
+      example = div(
+        cls := "border rounded p-4 bg-base-200",
+        div(
+          cls := "font-medium",
+          "Sample Card",
+        ),
+        div(
+          cls := "text-sm opacity-70 mt-1",
+          "This is an example of a card component.",
+        ),
       ),
     ),
-    (
-      "Data Display",
-      List(
-        ComponentInfo("Table", "Data table", "#table"),
-        ComponentInfo("Card", "Content container", "#card"),
-        ComponentInfo("Badge", "Status indicator", "#badge"),
+    ComponentInfo(
+      name = "Avatar",
+      description = "User or item avatars with various shapes and sizes.",
+      href = "#avatar",
+      example = div(
+        cls := "flex gap-2",
+        Avatar <> AvatarProps(
+          text = Some("JD"),
+          bgClass = "bg-primary",
+          textColorClass = "text-primary-content",
+        ),
+        Avatar <> AvatarProps(
+          text = Some("AB"),
+          bgClass = "bg-secondary",
+          textColorClass = "text-secondary-content",
+        ),
       ),
     ),
-    (
-      "Data Entry",
-      List(
-        ComponentInfo("Form", "Data collection", "#form"),
-        ComponentInfo("Input", "Text field", "#input"),
-        ComponentInfo("Select", "Option selector", "#select"),
+    ComponentInfo(
+      name = "Badge",
+      description = "Small status indicators or tags.",
+      href = "#badge",
+      example = div(
+        cls := "flex gap-2",
+        Badge <> BadgeProps(text = "New", variant = "primary"),
+        Badge <> BadgeProps(text = "Success", variant = "success"),
+        Badge <> BadgeProps(text = "Warning", variant = "warning"),
       ),
     ),
-    (
-      "Feedback",
-      List(
-        ComponentInfo("Alert", "Feedback message", "#alert"),
-        ComponentInfo("Modal", "Dialog window", "#modal"),
-        ComponentInfo("Progress", "Progress indicator", "#progress"),
+    ComponentInfo(
+      name = "Alert",
+      description = "Notification and feedback messages.",
+      href = "#alert",
+      example = Alert <> AlertProps(
+        variant = "info",
+        title = Some("Information"),
+        message = Some("This is an informational alert."),
       ),
     ),
+    ComponentInfo(
+      name = "Input",
+      description = "Form input elements with styling options.",
+      href = "#input",
+      example = Input <> InputProps(
+        placeholder = Some("Enter text here..."),
+        bordered = true,
+      ),
+    ),
+    ComponentInfo(
+      name = "Progress",
+      description = "Progress indicators and loading state.",
+      href = "#progress",
+      example = div(
+        Progress <> ProgressProps(
+          value = Some(70.0),
+          variant = "primary",
+        ),
+      ),
+    ),
+    // More components can be added here
   )
 
   div(
     h1(cls := "text-3xl font-bold mb-6", "Components Overview"),
     p(
       cls := "text-xl mb-8",
-      "fluxus-daisyui provides UI components for building beautiful Scala.js applications with Fluxus and DaisyUI.",
+      "Browse our collection of UI components built with fluxus-daisyui.",
     ),
 
-    // Component categories
+    // Component cards in a grid
     div(
-      cls := "space-y-12",
-      componentCategories.map { case (category, components) =>
-        div(
-          cls := "mb-4",
-          h2(cls := "text-2xl font-bold mb-4", s"$category"),
-          div(
-            cls := "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4",
-            components.map(comp => ComponentCard <> comp),
-          ),
-        )
-      },
+      cls := "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+      components.map(comp => ComponentCard <> comp),
     ),
   )
 }
 
-// Component info model
+// Extended component info model with example
 case class ComponentInfo(
     name: String,
     description: String,
     href: String,
+    example: FluxusNode,
 )
 
-// Component card in overview
+// Component card in overview - styled like the featured components section
 val ComponentCard = (props: ComponentInfo) => {
-  a(
-    href := props.href,
-    cls  := "block p-4 border rounded-md hover:border-primary hover:shadow-md transition-all",
-    div(
-      cls := "text-lg font-medium mb-1",
-      props.name,
-    ),
-    div(
-      cls := "text-sm opacity-70",
-      props.description,
+  Card <> CardProps(
+    children = div(
+      h3(cls := "text-xl font-bold mb-2", props.name),
+      p(cls  := "mb-4", props.description),
+      div(
+        cls := "mb-4",
+        props.example,
+      ),
+      div(
+        cls := "mt-4",
+        a(
+          href := props.href,
+          cls  := "btn btn-sm btn-ghost",
+          "View Documentation",
+        ),
+      ),
     ),
   )
 }
