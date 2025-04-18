@@ -3,7 +3,7 @@ package io.github.edadma.fluxus.daisyui.docs
 import io.github.edadma.fluxus.*
 import io.github.edadma.fluxus.daisyui.*
 
-// Components overview page with card layout matching the previous Featured Components section
+// Components overview page with category headings and card layout
 val ComponentsOverviewPage = () => {
   // Component info for cards
   val components = List(
@@ -17,49 +17,38 @@ val ComponentsOverviewPage = () => {
         Button <> ButtonProps(text = "Secondary", variant = "secondary"),
         Button <> ButtonProps(text = "Accent", variant = "accent"),
       ),
+      category = "Input Components",
     ),
     ComponentInfo(
       name = "Table",
       description = "Powerful tables for data display.",
       href = "#table",
-      example = div(
-        cls := "border rounded overflow-x-auto",
-        table(
-          cls := "table table-xs",
-          thead(
-            tr(
-              th("ID"),
-              th("Name"),
-            ),
-          ),
-          tbody(
-            tr(
-              td("1"),
-              td("John"),
-            ),
-            tr(
-              td("2"),
-              td("Jane"),
-            ),
-          ),
+      example = Table <> TableProps(
+        data = List(
+          Map("id" -> 1, "name" -> "John"),
+          Map("id" -> 2, "name" -> "Jane"),
         ),
+        columns = List(
+          TableColumnDef(key = "id", title = "ID"),
+          TableColumnDef(key = "name", title = "Name"),
+        ),
+        size = "xs",
+        bordered = true,
       ),
+      category = "Data Display Components",
     ),
     ComponentInfo(
       name = "Card",
       description = "Versatile content containers.",
       href = "#card",
-      example = div(
-        cls := "border rounded p-4 bg-base-200",
-        div(
-          cls := "font-medium",
-          "Sample Card",
+      example = Card <> CardProps(
+        title = Some("Sample Card"),
+        children = div(
+          p("This is an example of a card component."),
         ),
-        div(
-          cls := "text-sm opacity-70 mt-1",
-          "This is an example of a card component.",
-        ),
+        bgClass = "bg-base-200",
       ),
+      category = "Data Display Components",
     ),
     ComponentInfo(
       name = "Avatar",
@@ -78,6 +67,7 @@ val ComponentsOverviewPage = () => {
           textColorClass = "text-secondary-content",
         ),
       ),
+      category = "Data Display Components",
     ),
     ComponentInfo(
       name = "Badge",
@@ -89,6 +79,7 @@ val ComponentsOverviewPage = () => {
         Badge <> BadgeProps(text = "Success", variant = "success"),
         Badge <> BadgeProps(text = "Warning", variant = "warning"),
       ),
+      category = "Data Display Components",
     ),
     ComponentInfo(
       name = "Alert",
@@ -99,6 +90,7 @@ val ComponentsOverviewPage = () => {
         title = Some("Information"),
         message = Some("This is an informational alert."),
       ),
+      category = "Feedback Components",
     ),
     ComponentInfo(
       name = "Input",
@@ -108,6 +100,7 @@ val ComponentsOverviewPage = () => {
         placeholder = Some("Enter text here..."),
         bordered = true,
       ),
+      category = "Input Components",
     ),
     ComponentInfo(
       name = "Progress",
@@ -119,8 +112,19 @@ val ComponentsOverviewPage = () => {
           variant = "primary",
         ),
       ),
+      category = "Feedback Components",
     ),
     // More components can be added here
+  )
+
+  // Group components by category
+  val componentsByCategory = components.groupBy(_.category)
+  val sortedCategories = List(
+    "Layout Components",
+    "Input Components",
+    "Data Display Components",
+    "Navigation Components",
+    "Feedback Components",
   )
 
   div(
@@ -130,20 +134,37 @@ val ComponentsOverviewPage = () => {
       "Browse our collection of UI components built with fluxus-daisyui.",
     ),
 
-    // Component cards in a grid
-    div(
-      cls := "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
-      components.map(comp => ComponentCard <> comp),
-    ),
+    // Render each category with its components
+    sortedCategories.filter(category => componentsByCategory.contains(category)).map(category => {
+      val categoryComponents = componentsByCategory(category)
+      div(
+        cls := "mb-12",
+        // Category heading with component count
+        div(
+          cls := "flex items-center mb-6",
+          h2(cls := "text-2xl font-bold", category),
+          span(
+            cls := "ml-2 px-2 py-1 text-sm rounded-md bg-base-200 text-base-content",
+            categoryComponents.length.toString,
+          ),
+        ),
+        // Component cards in a grid for this category
+        div(
+          cls := "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+          categoryComponents.map(comp => ComponentCard <> comp),
+        ),
+      )
+    }),
   )
 }
 
-// Extended component info model with example
+// Extended component info model with category
 case class ComponentInfo(
     name: String,
     description: String,
     href: String,
     example: FluxusNode,
+    category: String,
 )
 
 // Component card in overview - styled like the featured components section
