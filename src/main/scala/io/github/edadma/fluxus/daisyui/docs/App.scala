@@ -4,6 +4,10 @@ import io.github.edadma.fluxus.*
 import io.github.edadma.fluxus.daisyui.*
 import org.scalajs.dom
 
+@main def run(): Unit =
+  //  logger.setLogLevel(LogLevel.DEBUG)
+  render(App, "app")
+
 // Main application entry point
 def App: FluxusNode = {
   // Simple hash-based routing
@@ -207,6 +211,22 @@ val Example = (props: ExampleProps) => {
       } else null,
     ),
   )
+}
+
+case class PaginationExampleProps(users: List[Map[String, Any]], customColumns: List[TableColumnDef])
+
+val PaginationExample: PaginationExampleProps => FluxusNode = {
+  case PaginationExampleProps(users, customColumns) =>
+    val (currentPage, setCurrentPage, _) = useState(1)
+    TableWithPagination <> TableWithPaginationProps(
+      data = users,
+      columns = customColumns,
+      pageSize = 2,
+      currentPage = currentPage,
+      onPageChange = setCurrentPage,
+      bordered = true,
+      hover = true,
+    )
 }
 
 // Home page
@@ -882,18 +902,7 @@ Table <> TableProps(
     ExampleProps(
       title = "Table with Pagination",
       description = "Table with built-in pagination",
-      example = {
-        val (currentPage, setCurrentPage, _) = useState(1)
-        TableWithPagination <> TableWithPaginationProps(
-          data = users,
-          columns = customColumns,
-          pageSize = 2,
-          currentPage = currentPage,
-          onPageChange = setCurrentPage,
-          bordered = true,
-          hover = true,
-        )
-      },
+      example = PaginationExample <> PaginationExampleProps(users, customColumns),
       code = """
 val (currentPage, setCurrentPage, _) = useState(1)
 

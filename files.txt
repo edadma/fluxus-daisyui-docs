@@ -1,0 +1,17 @@
+; fluxus-daisyui library docs website code
+
+# app sources
+./src/main/scala/io/github/fluxus/daisyui/docs
+App.scala
+
+# build files
+./
+build.sbt
+index.css
+index.html
+main.js
+package.json
+tailwind.config.js
+vite.config.js
+./project
+plugins.sbt
